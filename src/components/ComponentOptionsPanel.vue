@@ -1,7 +1,6 @@
 <template>
   <div v-if="component">
     <DropdownOptions v-if="component === 'Dropdown'" :options="options" @update:options="emit('update:options', $event)" />
-    <ButtonOptions v-else-if="component === 'Button'" :options="options" @update:options="emit('update:options', $event)" />
     <CardOptions v-else-if="component === 'Card'" :options="options" @update:options="emit('update:options', $event)" />
     <AlertOptions v-else-if="component === 'Alert'" :options="options" @update:options="emit('update:options', $event)" />
     <BadgeOptions v-else-if="component === 'Badge'" :options="options" @update:options="emit('update:options', $event)" />
@@ -15,7 +14,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
-import { DropdownOptions, ButtonOptions, CardOptions, AlertOptions, BadgeOptions, ListGroupOptions, NavbarOptions, GridOptions, FlexOptions, ModalOptions } from './options'
+import { DropdownOptions, CardOptions, AlertOptions, BadgeOptions, ListGroupOptions, NavbarOptions, GridOptions, FlexOptions, ModalOptions } from './options'
 const props = defineProps({ component: String, options: Object })
 const emit = defineEmits(['update:options'])
 </script>
