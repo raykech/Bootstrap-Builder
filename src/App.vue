@@ -159,6 +159,11 @@ const blockMeta = {
     component: Blocks.ImageBlock,
     getDefaultOptions: Blocks.getImageDefaultOptions,
     generateHtml: Blocks.generateImageHtml
+  },
+  ButtonGroup: {
+    component: Blocks.ButtonGroupBlock,
+    getDefaultOptions: Blocks.getButtonGroupDefaultOptions,
+    generateHtml: Blocks.generateButtonGroupHtml
   }
 }
 

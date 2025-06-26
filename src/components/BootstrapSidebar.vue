@@ -19,7 +19,7 @@ const props = defineProps({
 })
 const search = ref('')
 const components = [
-  'Button', 'Alert', 'Navbar',
+  'Button', 'ButtonGroup', 'Alert', 'Navbar',
   'Container', 'Grid', 'Flex', 'Card', 'Modal', 'Badge', 'ListGroup', 'Progress', 'Spinner', 'Toast', 'Tooltip', 'Popover', 'Collapse', 'Dropdown', 'Pagination', 'Breadcrumb', 'Accordion', 'Carousel', 'Offcanvas', 'Nav', 'Tabs', 'Form', 'InputGroup', 'Table', 'Image', 'Close', 'Placeholder'
 ]
 const filteredComponents = computed(() =>

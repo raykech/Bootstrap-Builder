@@ -23,6 +23,11 @@ function updateItem(idx, key, value) {
   if (key === 'type' && value === 'select' && !Array.isArray(updatedItem.options)) {
     updatedItem.options = [{ value: 'default', text: 'Varsayılan Seçenek' }]
   }
+  // 'range' tipine geçildiğinde min/max/step değerlerini ekle
+  if (key === 'type' && value === 'range') {
+    if (updatedItem.min === undefined) updatedItem.min = 0;
+    if (updatedItem.max === undefined) updatedItem.max = 100;
+  }
 
   items[idx] = updatedItem
   emit('update:options', { ...options.value, items })
@@ -47,7 +52,11 @@ function addItem() {
     checked: false, // Checkbox için varsayılan
     inline: false, // Checkbox için varsayılan
     options: [{ value: 'default', text: 'Varsayılan Seçenek' }], // Select için varsayılan
-    extraClass: ''
+    extraClass: '',
+    validation: 'none', // 'none', 'valid', 'invalid'
+    invalidFeedback: 'Lütfen geçerli bir değer girin.',
+    min: 0, // Range için
+    max: 100 // Range için
   })
   emit('update:options', { ...options.value, items })
 }
@@ -61,6 +70,10 @@ function removeItem(idx) {
 
 <template>
   <div>
+    <div class="mb-3">
+      <input class="form-check-input me-2" type="checkbox" id="formValidatedCheck" :checked="options.validated" @change="updateField('validated', $event.target.checked)" />
+      <label class="form-check-label" for="formValidatedCheck">Doğrulama Aktif (was-validated)</label>
+    </div>
     <div class="mb-3">
       <label class="form-label">Form Ekstra Sınıf</label>
       <input type="text" class="form-control" :value="options.extraClass" @input="updateField('extraClass', $event.target.value)" />
@@ -85,6 +98,7 @@ function removeItem(idx) {
             <option value="textarea">Çok Satırlı Metin</option>
             <option value="checkbox">Onay Kutusu</option>
             <option value="select">Seçim Kutusu</option>
+            <option value="range">Aralık (Range)</option>
           </select>
         </div>
 
@@ -137,6 +151,17 @@ function removeItem(idx) {
           <textarea class="form-control" rows="3" :value="item.options.map(o => `${o.value},${o.text}`).join('\n')" @input="updateItem(idx, 'options', $event.target.value.split('\n').map(line => { const parts = line.split(','); return { value: parts[0], text: parts.slice(1).join(',') } }))"></textarea>
         </div>
 
+        <div v-if="item.type === 'range'" class="row g-2 mb-2">
+          <div class="col">
+            <label class="form-label">Min</label>
+            <input type="number" class="form-control" :value="item.min" @input="updateItem(idx, 'min', +$event.target.value)" />
+          </div>
+          <div class="col">
+            <label class="form-label">Max</label>
+            <input type="number" class="form-control" :value="item.max" @input="updateItem(idx, 'max', +$event.target.value)" />
+          </div>
+        </div>
+
         <div class="form-check mb-2">
           <input class="form-check-input" type="checkbox" :id="'required'+item.id" :checked="item.required" @change="updateItem(idx, 'required', $event.target.checked)" />
           <label class="form-check-label" :for="'required'+item.id">Gerekli</label>
@@ -148,6 +173,19 @@ function removeItem(idx) {
         <div v-if="['text', 'email', 'password', 'number', 'textarea'].includes(item.type)" class="form-check mb-2">
           <input class="form-check-input" type="checkbox" :id="'readOnly'+item.id" :checked="item.readOnly" @change="updateItem(idx, 'readOnly', $event.target.checked)" />
           <label class="form-check-label" :for="'readOnly'+item.id">Salt Okunur</label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Doğrulama (Validation)</label>
+          <select class="form-select" :value="item.validation" @change="updateItem(idx, 'validation', $event.target.value)">
+            <option value="none">Yok</option>
+            <option value="valid">Geçerli (Valid)</option>
+            <option value="invalid">Geçersiz (Invalid)</option>
+          </select>
+        </div>
+        <div v-if="item.validation === 'invalid'" class="mb-2">
+          <label class="form-label">Geçersiz Geri Bildirim Mesajı</label>
+          <input type="text" class="form-control" :value="item.invalidFeedback" @input="updateItem(idx, 'invalidFeedback', $event.target.value)" />
         </div>
 
         <div class="mb-2">
@@ -166,6 +204,7 @@ function removeItem(idx) {
 <script>
 export function getDefaultOptions() {
   return {
+    validated: false,
     extraClass: '',
     items: [
       {
@@ -180,7 +219,9 @@ export function getDefaultOptions() {
         readOnly: false,
         floatingLabel: false,
         size: '',
-        extraClass: ''
+        extraClass: '',
+        validation: 'none',
+        invalidFeedback: 'Lütfen geçerli bir değer girin.'
       },
       {
         id: 'input-email-1',
@@ -194,7 +235,9 @@ export function getDefaultOptions() {
         readOnly: false,
         floatingLabel: false,
         size: '',
-        extraClass: ''
+        extraClass: '',
+        validation: 'valid',
+        invalidFeedback: 'Lütfen geçerli bir e-posta girin.'
       },
       {
         id: 'input-checkbox-1',
@@ -204,7 +247,9 @@ export function getDefaultOptions() {
         disabled: false,
         inline: false,
         helpText: '',
-        extraClass: ''
+        extraClass: '',
+        validation: 'none',
+        invalidFeedback: ''
       },
       {
         id: 'input-select-1',
@@ -219,20 +264,37 @@ export function getDefaultOptions() {
           { value: 'option3', text: 'Seçenek 3' }
         ],
         helpText: '',
-        extraClass: ''
+        extraClass: '',
+        validation: 'invalid',
+        invalidFeedback: 'Lütfen bir seçim yapın.'
+      },
+      {
+        id: 'input-range-1',
+        type: 'range',
+        label: 'Aralık Seçimi',
+        value: '50',
+        min: 0,
+        max: 100,
+        helpText: '',
+        extraClass: '',
+        validation: 'none',
+        invalidFeedback: ''
       }
     ]
   }
 }
 
 export function generateHtml(options) {
-  const { items = [], extraClass = '' } = options || {};
+  const { items = [], extraClass = '', validated = false } = options || {};
   let formHtml = '';
+  const formClasses = [extraClass];
+  if (validated) formClasses.push('was-validated');
 
   const generateInputHtml = (item) => {
     const inputClasses = ['form-control'];
     if (item.size) inputClasses.push(`form-control-${item.size}`);
-    if (item.extraClass) inputClasses.push(item.extraClass);
+    if (item.validation === 'valid') inputClasses.push('is-valid');
+    if (item.validation === 'invalid') inputClasses.push('is-invalid');
 
     const attrs = [
       `type="${item.type}"`,
@@ -244,27 +306,30 @@ export function generateHtml(options) {
       item.disabled ? 'disabled' : '',
       item.readOnly ? 'readonly' : ''
     ].filter(Boolean).join(' ');
+    
+    const feedbackHtml = item.validation === 'invalid' ? `\n  <div class="invalid-feedback">${item.invalidFeedback}</div>` : '';
 
     if (item.floatingLabel) {
       return `
-<div class="form-floating mb-3">
+<div class="form-floating mb-3 ${item.extraClass || ''}">
   <input ${attrs}>
   <label for="${item.id}">${item.label}</label>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
 </div>`;
     } else {
       return `
-<div class="mb-3">
+<div class="mb-3 ${item.extraClass || ''}">
   <label for="${item.id}" class="form-label">${item.label}</label>
   <input ${attrs}>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
 </div>`;
     }
   };
 
   const generateTextareaHtml = (item) => {
-    const textareaClasses = ['form-control'];
-    if (item.extraClass) textareaClasses.push(item.extraClass);
+    const textareaClasses = ['form-control', item.validation === 'valid' ? 'is-valid' : '', item.validation === 'invalid' ? 'is-invalid' : ''].filter(Boolean);
 
     const attrs = [
       `class="${textareaClasses.join(' ')}"`,
@@ -276,32 +341,38 @@ export function generateHtml(options) {
       item.readOnly ? 'readonly' : ''
     ].filter(Boolean).join(' ');
 
+    const feedbackHtml = item.validation === 'invalid' ? `\n  <div class="invalid-feedback">${item.invalidFeedback}</div>` : '';
+
     if (item.floatingLabel) {
       return `
-<div class="form-floating mb-3">
+<div class="form-floating mb-3 ${item.extraClass || ''}">
   <textarea ${attrs}>${item.value}</textarea>
   <label for="${item.id}">${item.label}</label>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
 </div>`;
     } else {
       return `
-<div class="mb-3">
+<div class="mb-3 ${item.extraClass || ''}">
   <label for="${item.id}" class="form-label">${item.label}</label>
   <textarea ${attrs}>${item.value}</textarea>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
 </div>`;
     }
   };
 
   const generateCheckboxHtml = (item) => {
-    const wrapperClass = item.inline ? 'form-check form-check-inline' : 'form-check';
-    const inputClasses = ['form-check-input'];
-    if (item.extraClass) inputClasses.push(item.extraClass);
+    const wrapperClass = [item.inline ? 'form-check-inline' : '', 'form-check', item.extraClass || ''].filter(Boolean).join(' ');
+    const inputClasses = ['form-check-input', item.validation === 'valid' ? 'is-valid' : '', item.validation === 'invalid' ? 'is-invalid' : ''].filter(Boolean);
+    
+    const feedbackHtml = item.validation === 'invalid' ? `\n  <div class="invalid-feedback d-block">${item.invalidFeedback}</div>` : '';
 
     return `
 <div class="${wrapperClass} mb-3">
   <input class="${inputClasses.join(' ')}" type="checkbox" id="${item.id}" ${item.checked ? 'checked' : ''} ${item.disabled ? 'disabled' : ''}>
   <label class="form-check-label" for="${item.id}">${item.label}</label>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
 </div>`;
   };
@@ -309,7 +380,8 @@ export function generateHtml(options) {
   const generateSelectHtml = (item) => {
     const selectClasses = ['form-select'];
     if (item.size) selectClasses.push(`form-select-${item.size}`);
-    if (item.extraClass) selectClasses.push(item.extraClass);
+    if (item.validation === 'valid') selectClasses.push('is-valid');
+    if (item.validation === 'invalid') selectClasses.push('is-invalid');
 
     const attrs = [
       `class="${selectClasses.join(' ')}"`,
@@ -321,13 +393,39 @@ export function generateHtml(options) {
 
     const optionsHtml = item.options.map(opt => `<option value="${opt.value}" ${item.value === opt.value ? 'selected' : ''}>${opt.text}</option>`).join('\n    ');
 
+    const feedbackHtml = item.validation === 'invalid' ? `\n  <div class="invalid-feedback">${item.invalidFeedback}</div>` : '';
+
     return `
-<div class="mb-3">
+<div class="mb-3 ${item.extraClass || ''}">
   <label for="${item.id}" class="form-label">${item.label}</label>
   <select ${attrs}>
     ${optionsHtml}
   </select>
+  ${feedbackHtml}
   ${item.helpText ? `<div class="form-text">${item.helpText}</div>` : ''}
+</div>`;
+  };
+
+  const generateRangeHtml = (item) => {
+    const inputClasses = ['form-range', item.validation === 'valid' ? 'is-valid' : '', item.validation === 'invalid' ? 'is-invalid' : ''].filter(Boolean);
+
+    const attrs = [
+      `type="range"`,
+      `class="${inputClasses.join(' ')}"`,
+      `id="${item.id}"`,
+      item.min !== undefined ? `min="${item.min}"` : '',
+      item.max !== undefined ? `max="${item.max}"` : '',
+      item.value ? `value="${item.value}"` : '',
+      item.disabled ? 'disabled' : ''
+    ].filter(Boolean).join(' ');
+
+    const feedbackHtml = item.validation === 'invalid' ? `\n  <div class="invalid-feedback">${item.invalidFeedback}</div>` : '';
+
+    return `
+<div class="mb-3 ${item.extraClass || ''}">
+  <label for="${item.id}" class="form-label">${item.label}</label>
+  <input ${attrs}>
+  ${feedbackHtml}
 </div>`;
   };
 
@@ -348,11 +446,14 @@ export function generateHtml(options) {
       case 'select':
         formHtml += generateSelectHtml(item);
         break;
+      case 'range':
+        formHtml += generateRangeHtml(item);
+        break;
       default:
         formHtml += `<p class="text-danger">Desteklenmeyen alan tipi: ${item.type}</p>`;
     }
   });
 
-  return `<form class="${extraClass}">\n${formHtml}\n</form>`;
+  return `<form class="${formClasses.join(' ')}">\n${formHtml}\n</form>`;
 }
 </script>

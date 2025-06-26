@@ -3,6 +3,7 @@ import AlertBlock, { getDefaultOptions as getAlertDefaultOptions, generateHtml a
 import BadgeBlock, { getDefaultOptions as getBadgeDefaultOptions, generateHtml as generateBadgeHtml } from './BadgeBlock.vue';
 import BreadcrumbBlock, { getDefaultOptions as getBreadcrumbDefaultOptions, generateHtml as generateBreadcrumbHtml } from './BreadcrumbBlock.vue';
 import ButtonBlock, { getDefaultOptions as getButtonDefaultOptions, generateHtml as generateButtonHtml } from './ButtonBlock.vue';
+import ButtonGroupBlock, { getDefaultOptions as getButtonGroupDefaultOptions, generateHtml as generateButtonGroupHtml } from './ButtonGroupBlock.vue';
 import CardBlock, { getDefaultOptions as getCardDefaultOptions, generateHtml as generateCardHtml } from './CardBlock.vue';
 import CarouselBlock, { getDefaultOptions as getCarouselDefaultOptions, generateHtml as generateCarouselHtml } from './CarouselBlock.vue';
 import CloseBlock, { getDefaultOptions as getCloseDefaultOptions, generateHtml as generateCloseHtml } from './CloseBlock.vue';
@@ -35,6 +36,7 @@ export {
   BadgeBlock, getBadgeDefaultOptions, generateBadgeHtml,
   BreadcrumbBlock, getBreadcrumbDefaultOptions, generateBreadcrumbHtml,
   ButtonBlock, getButtonDefaultOptions, generateButtonHtml,
+  ButtonGroupBlock, getButtonGroupDefaultOptions, generateButtonGroupHtml,
   CardBlock, getCardDefaultOptions, generateCardHtml,
   CarouselBlock, getCarouselDefaultOptions, generateCarouselHtml,
   CloseBlock, getCloseDefaultOptions, generateCloseHtml,
