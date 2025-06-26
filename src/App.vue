@@ -139,6 +139,26 @@ const blockMeta = {
     component: Blocks.AccordionBlock,
     getDefaultOptions: Blocks.getAccordionDefaultOptions,
     generateHtml: Blocks.generateAccordionHtml
+  },
+  Carousel: {
+    component: Blocks.CarouselBlock,
+    getDefaultOptions: Blocks.getCarouselDefaultOptions,
+    generateHtml: Blocks.generateCarouselHtml
+  },
+  Close: {
+    component: Blocks.CloseBlock,
+    getDefaultOptions: Blocks.getCloseDefaultOptions,
+    generateHtml: Blocks.generateCloseHtml
+  },
+  Placeholder: {
+    component: Blocks.PlaceholderBlock,
+    getDefaultOptions: Blocks.getPlaceholderDefaultOptions,
+    generateHtml: Blocks.generatePlaceholderHtml
+  },
+  Image: {
+    component: Blocks.ImageBlock,
+    getDefaultOptions: Blocks.getImageDefaultOptions,
+    generateHtml: Blocks.generateImageHtml
   }
 }
 
