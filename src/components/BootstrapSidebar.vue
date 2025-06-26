@@ -20,7 +20,7 @@ const props = defineProps({
 const search = ref('')
 const components = [
   'Button', 'Alert', 'Navbar',
-  'Container', 'Grid', 'Flex', 'Card', 'Modal', 'Badge', 'ListGroup', 'Progress', 'Spinner', 'Toast', 'Tooltip', 'Popover', 'Collapse', 'Dropdown', 'Pagination', 'Breadcrumb', 'Accordion', 'Carousel', 'Offcanvas', 'Nav', 'Tabs', 'Form', 'Input Group', 'Table', 'Image', 'Close', 'Placeholder'
+  'Container', 'Grid', 'Flex', 'Card', 'Modal', 'Badge', 'ListGroup', 'Progress', 'Spinner', 'Toast', 'Tooltip', 'Popover', 'Collapse', 'Dropdown', 'Pagination', 'Breadcrumb', 'Accordion', 'Carousel', 'Offcanvas', 'Nav', 'Tabs', 'Form', 'InputGroup', 'Table', 'Image', 'Close', 'Placeholder'
 ]
 const filteredComponents = computed(() =>
   components.filter(c => c.toLowerCase().includes(search.value.toLowerCase()))

@@ -109,6 +109,36 @@ const blockMeta = {
     component: Blocks.PopoverBlock,
     getDefaultOptions: Blocks.getPopoverDefaultOptions,
     generateHtml: Blocks.generatePopoverHtml
+  },
+  Collapse: {
+    component: Blocks.CollapseBlock,
+    getDefaultOptions: Blocks.getCollapseDefaultOptions,
+    generateHtml: Blocks.generateCollapseHtml
+  },
+  InputGroup: {
+    component: Blocks.InputGroupBlock,
+    getDefaultOptions: Blocks.getInputGroupDefaultOptions,
+    generateHtml: Blocks.generateInputGroupHtml
+  },
+  Nav: {
+    component: Blocks.NavBlock,
+    getDefaultOptions: Blocks.getNavDefaultOptions,
+    generateHtml: Blocks.generateNavHtml
+  },
+  Pagination: {
+    component: Blocks.PaginationBlock,
+    getDefaultOptions: Blocks.getPaginationDefaultOptions,
+    generateHtml: Blocks.generatePaginationHtml
+  },
+  Breadcrumb: {
+    component: Blocks.BreadcrumbBlock,
+    getDefaultOptions: Blocks.getBreadcrumbDefaultOptions,
+    generateHtml: Blocks.generateBreadcrumbHtml
+  },
+  Accordion: {
+    component: Blocks.AccordionBlock,
+    getDefaultOptions: Blocks.getAccordionDefaultOptions,
+    generateHtml: Blocks.generateAccordionHtml
   }
 }
 
@@ -368,7 +398,9 @@ function removeComponent(idx) {
 <style scoped>
 .app-layout {
   display: flex;
-  min-height: 100vh;
+  /* min-height yerine height kullanarak layout'un viewport'u aşmasını engelliyoruz. */
+  /* Bu, sayfanın tamamının değil, sadece içerik alanının kaymasını sağlar. */
+  height: 100vh;
   background: #f8f9fa;
 }
 .sidebar-area {
@@ -412,6 +444,8 @@ function removeComponent(idx) {
   display: flex;
   flex-direction: column;
   padding: 0 1rem;
+  /* main-area'nın kendi container'ından taşmasını engeller, bu da flexbox'ın doğru çalışması için önemlidir. */
+  overflow: hidden;
 }
 .content-scroll-area {
   flex: 1;

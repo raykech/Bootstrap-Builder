@@ -24,7 +24,7 @@ export default [
   { type: 'Nav', label: 'Nav' },
   { type: 'Tabs', label: 'Tabs' },
   { type: 'Form', label: 'Form' },
-  { type: 'InputGroup', label: 'Input Group' },
+  { type: 'InputGroup', label: 'InputGroup' },
   { type: 'Table', label: 'Table' },
   { type: 'Image', label: 'Image' },
   { type: 'Close', label: 'Close' },
