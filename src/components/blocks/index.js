@@ -10,6 +10,14 @@ import DropdownBlock, { getDefaultOptions as getDropdownDefaultOptions, generate
 import ListGroupBlock, { getDefaultOptions as getListGroupDefaultOptions, generateHtml as generateListGroupHtml } from './ListGroupBlock.vue';
 import OffcanvasBlock, { getDefaultOptions as getOffcanvasDefaultOptions, generateHtml as generateOffcanvasHtml } from './OffcanvasBlock.vue';
 import ToastBlock, { getDefaultOptions as getToastDefaultOptions, generateHtml as generateToastHtml } from './ToastBlock.vue';
+import TabsBlock, { getDefaultOptions as getTabsDefaultOptions, generateHtml as generateTabsHtml } from './TabsBlock.vue';
+import ContainerBlock, { getDefaultOptions as getContainerDefaultOptions, generateHtml as generateContainerHtml } from './ContainerBlock.vue';
+import ProgressBlock, { getDefaultOptions as getProgressDefaultOptions, generateHtml as generateProgressHtml } from './ProgressBlock.vue';
+import TableBlock, { getDefaultOptions as getTableDefaultOptions, generateHtml as generateTableHtml } from './TableBlock.vue';
+import FormBlock, { getDefaultOptions as getFormDefaultOptions, generateHtml as generateFormHtml } from './FormBlock.vue';
+import SpinnerBlock, { getDefaultOptions as getSpinnerDefaultOptions, generateHtml as generateSpinnerHtml } from './SpinnerBlock.vue';
+import TooltipBlock, { getDefaultOptions as getTooltipDefaultOptions, generateHtml as generateTooltipHtml } from './TooltipBlock.vue';
+import PopoverBlock, { getDefaultOptions as getPopoverDefaultOptions, generateHtml as generatePopoverHtml } from './PopoverBlock.vue';
 
 export {
   ButtonBlock,
@@ -47,5 +55,29 @@ export {
   generateOffcanvasHtml,
   ToastBlock,
   getToastDefaultOptions,
-  generateToastHtml
+  generateToastHtml,
+  TabsBlock,
+  getTabsDefaultOptions,
+  generateTabsHtml,
+  ContainerBlock,
+  getContainerDefaultOptions,
+  generateContainerHtml,
+  ProgressBlock,
+  getProgressDefaultOptions,
+  generateProgressHtml,
+  TableBlock,
+  getTableDefaultOptions,
+  generateTableHtml,
+  FormBlock,
+  getFormDefaultOptions,
+  generateFormHtml,
+  SpinnerBlock,
+  getSpinnerDefaultOptions, 
+  generateSpinnerHtml,
+  TooltipBlock,
+  getTooltipDefaultOptions,
+  generateTooltipHtml,
+  PopoverBlock,
+  getPopoverDefaultOptions,
+  generatePopoverHtml,
 };

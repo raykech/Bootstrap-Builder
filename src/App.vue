@@ -69,6 +69,46 @@ const blockMeta = {
     component: Blocks.ToastBlock,
     getDefaultOptions: Blocks.getToastDefaultOptions,
     generateHtml: Blocks.generateToastHtml
+  },
+  Tabs: {
+    component: Blocks.TabsBlock,
+    getDefaultOptions: Blocks.getTabsDefaultOptions,
+    generateHtml: Blocks.generateTabsHtml
+  },
+  Container: {
+    component: Blocks.ContainerBlock,
+    getDefaultOptions: Blocks.getContainerDefaultOptions,
+    generateHtml: Blocks.generateContainerHtml
+  },
+  Progress: {
+    component: Blocks.ProgressBlock,
+    getDefaultOptions: Blocks.getProgressDefaultOptions,
+    generateHtml: Blocks.generateProgressHtml
+  },
+  Table: {
+    component: Blocks.TableBlock,
+    getDefaultOptions: Blocks.getTableDefaultOptions,
+    generateHtml: Blocks.generateTableHtml
+  },
+  Form: {
+    component: Blocks.FormBlock,
+    getDefaultOptions: Blocks.getFormDefaultOptions,
+    generateHtml: Blocks.generateFormHtml
+  },
+  Spinner: {
+    component: Blocks.SpinnerBlock,
+    getDefaultOptions: Blocks.getSpinnerDefaultOptions,
+    generateHtml: Blocks.generateSpinnerHtml
+  },
+  Tooltip: {
+    component: Blocks.TooltipBlock,
+    getDefaultOptions: Blocks.getTooltipDefaultOptions,
+    generateHtml: Blocks.generateTooltipHtml
+  },
+  Popover: {
+    component: Blocks.PopoverBlock,
+    getDefaultOptions: Blocks.getPopoverDefaultOptions,
+    generateHtml: Blocks.generatePopoverHtml
   }
 }
 
@@ -211,6 +251,18 @@ function generatePreviewSrcdoc(comp) {
           e.stopPropagation();
         }
       }, true);
+      // Tooltip ve Popover'ları başlat
+      // Bu script, iframe içindeki tüm tooltip ve popover'ları etkinleştirir.
+      function initializeBootstrapPlugins() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        // HTML içeriğine izin vermek ve sanitizasyonu bu araç için devre dışı bırakmak önemlidir.
+        [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, { html: true, sanitize: false }));
+      }
+      window.addEventListener('DOMContentLoaded', initializeBootstrapPlugins);
+      initializeBootstrapPlugins(); // DOM zaten yüklendiyse tekrar çalıştır
     <\/script>
   `;
   return `<html>\n<head>\n<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>\n<style>html,body{overflow:visible!important;min-height:0!important;}</style>\n</head>\n<body style='margin:0;padding:1rem;'>${html}<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'><\/script>${resizeScript}</body>\n</html>`
@@ -257,54 +309,56 @@ function removeComponent(idx) {
         <button class="btn btn-outline-secondary me-2" @click="toggleOptions">Seçenekler</button>
         <button class="btn btn-outline-secondary" @click="toggleCode">Kod</button>
       </div>
-      <div class="preview-area-outer preview-multi">
-        <div v-for="(comp, idx) in components" :key="'preview'+idx" class="preview-instance mb-4">
-          <div
-            class="preview-title h6 mb-2 d-flex align-items-center"
-            :class="{active: idx === selectedIndex}"
-            style="cursor:pointer;user-select:none;"
-            @click="() => { selectInstance(idx); showOptions = true; }"
-          >
-            Örnek {{ idx + 1 }} ({{ comp.type }})
-            <span v-if="idx === selectedIndex" class="badge bg-primary ms-2">Seçili</span>
-            <span v-else class="badge bg-success ms-2 edit-badge">Düzenle</span>
-            <button class="btn btn-sm btn-outline-danger ms-2" @click.stop="removeComponent(idx)">
-              Sil
-            </button>
+      <div class="content-scroll-area">
+        <div class="preview-area-outer preview-multi">
+          <div v-for="(comp, idx) in components" :key="'preview'+idx" class="preview-instance mb-4">
+            <div
+              class="preview-title h6 mb-2 d-flex align-items-center"
+              :class="{active: idx === selectedIndex}"
+              style="cursor:pointer;user-select:none;"
+              @click="() => { selectInstance(idx); showOptions = true; }"
+            >
+              Örnek {{ idx + 1 }} ({{ comp.type }})
+              <span v-if="idx === selectedIndex" class="badge bg-primary ms-2">Seçili</span>
+              <span v-else class="badge bg-success ms-2 edit-badge">Düzenle</span>
+              <button class="btn btn-sm btn-outline-danger ms-2" @click.stop="removeComponent(idx)">
+                Sil
+              </button>
+            </div>
+            <div class="preview-iframe-wrapper">
+              <iframe
+                class="preview-iframe-single"
+                :srcdoc="generatePreviewSrcdoc(comp)"
+                frameborder="0"
+                @load="resizeIframe"
+                :style="comp.type === 'Modal' ? 'min-height:600px;' : ''"
+              ></iframe>
+            </div>
           </div>
-          <div class="preview-iframe-wrapper">
-            <iframe
-              class="preview-iframe-single"
-              :srcdoc="generatePreviewSrcdoc(comp)"
-              frameborder="0"
-              @load="resizeIframe"
-              :style="comp.type === 'Modal' ? 'min-height:600px;' : ''"
-            ></iframe>
+          <div v-if="showOptions && selectedIndex >= 0" class="offcanvas-options">
+            <div class="offcanvas-backdrop" @click="toggleOptions"></div>
+            <div class="offcanvas-panel">
+              <button class="btn-close float-end" @click="toggleOptions"></button>
+              <component
+                :is="blockMeta[components[selectedIndex]?.type].component"
+                :options="components[selectedIndex]?.options"
+                @update:options="updateOptions"
+              />
+            </div>
           </div>
         </div>
-        <div v-if="showOptions && selectedIndex >= 0" class="offcanvas-options">
-          <div class="offcanvas-backdrop" @click="toggleOptions"></div>
-          <div class="offcanvas-panel">
-            <button class="btn-close float-end" @click="toggleOptions"></button>
-            <component
-              :is="blockMeta[components[selectedIndex]?.type].component"
-              :options="components[selectedIndex]?.options"
-              @update:options="updateOptions"
-            />
+        <div v-if="showCode && components.length > 0" class="code-area">
+          <h6>Kod Görünümü</h6>
+          <div v-for="(code, idx) in codeExamples" :key="'code'+idx" class="mb-3">
+            <div class="d-flex align-items-center mb-1">
+              <div class="fw-bold flex-grow-1">Örnek {{ idx + 1 }} ({{ components[idx].type }})</div>
+              <button class="btn btn-sm btn-outline-primary ms-2" @click="copyCode(idx)">
+                <span v-if="!copyStatus[idx]">Kopyala</span>
+                <span v-else>Kopyalandı!</span>
+              </button>
+            </div>
+            <pre class="bg-light p-3 rounded border"><code>{{ code }}</code></pre>
           </div>
-        </div>
-      </div>
-      <div v-if="showCode && components.length > 0" class="code-area">
-        <h6>Kod Görünümü</h6>
-        <div v-for="(code, idx) in codeExamples" :key="'code'+idx" class="mb-3">
-          <div class="d-flex align-items-center mb-1">
-            <div class="fw-bold flex-grow-1">Örnek {{ idx + 1 }} ({{ components[idx].type }})</div>
-            <button class="btn btn-sm btn-outline-primary ms-2" @click="copyCode(idx)">
-              <span v-if="!copyStatus[idx]">Kopyala</span>
-              <span v-else>Kopyalandı!</span>
-            </button>
-          </div>
-          <pre class="bg-light p-3 rounded border"><code>{{ code }}</code></pre>
         </div>
       </div>
     </div>
@@ -357,13 +411,17 @@ function removeComponent(idx) {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
+}
+.content-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
 }
 .toolbar {
   min-height: 48px;
 }
 .preview-area-outer {
-  flex: 1;
   width: 100%;
   background: transparent;
   margin-bottom: 1rem;
