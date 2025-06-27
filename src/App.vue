@@ -90,10 +90,30 @@ const blockMeta = {
     getDefaultOptions: Blocks.getTableDefaultOptions,
     generateHtml: Blocks.generateTableHtml
   },
-  Form: {
-    component: Blocks.FormBlock,
-    getDefaultOptions: Blocks.getFormDefaultOptions,
-    generateHtml: Blocks.generateFormHtml
+  'Form-Input': {
+    component: Blocks.FormInputBlock,
+    getDefaultOptions: Blocks.getFormInputDefaultOptions,
+    generateHtml: Blocks.generateFormInputHtml
+  },
+  'Form-Select': {
+    component: Blocks.FormSelectBlock,
+    getDefaultOptions: Blocks.getFormSelectDefaultOptions,
+    generateHtml: Blocks.generateFormSelectHtml
+  },
+  'Form-Checkbox': {
+    component: Blocks.FormCheckboxBlock,
+    getDefaultOptions: Blocks.getFormCheckboxDefaultOptions,
+    generateHtml: Blocks.generateFormCheckboxHtml
+  },
+  'Form-Range': {
+    component: Blocks.FormRangeBlock,
+    getDefaultOptions: Blocks.getFormRangeDefaultOptions,
+    generateHtml: Blocks.generateFormRangeHtml
+  },
+  'Form-Textarea': {
+    component: Blocks.FormTextareaBlock,
+    getDefaultOptions: Blocks.getFormTextareaDefaultOptions,
+    generateHtml: Blocks.generateFormTextareaHtml
   },
   Spinner: {
     component: Blocks.SpinnerBlock,

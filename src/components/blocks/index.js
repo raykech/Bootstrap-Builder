@@ -11,7 +11,11 @@ import CollapseBlock, { getDefaultOptions as getCollapseDefaultOptions, generate
 import ContainerBlock, { getDefaultOptions as getContainerDefaultOptions, generateHtml as generateContainerHtml } from './ContainerBlock.vue';
 import DropdownBlock, { getDefaultOptions as getDropdownDefaultOptions, generateHtml as generateDropdownHtml } from './DropdownBlock.vue';
 import FlexBlock, { getDefaultOptions as getFlexDefaultOptions, generateHtml as generateFlexHtml } from './FlexBlock.vue';
-import FormBlock, { getDefaultOptions as getFormDefaultOptions, generateHtml as generateFormHtml } from './FormBlock.vue';
+import FormCheckboxBlock, { getDefaultOptions as getFormCheckboxDefaultOptions, generateHtml as generateFormCheckboxHtml } from './FormCheckboxBlock.vue';
+import FormInputBlock, { getDefaultOptions as getFormInputDefaultOptions, generateHtml as generateFormInputHtml } from './FormInputBlock.vue';
+import FormRangeBlock, { getDefaultOptions as getFormRangeDefaultOptions, generateHtml as generateFormRangeHtml } from './FormRangeBlock.vue';
+import FormSelectBlock, { getDefaultOptions as getFormSelectDefaultOptions, generateHtml as generateFormSelectHtml } from './FormSelectBlock.vue';
+import FormTextareaBlock, { getDefaultOptions as getFormTextareaDefaultOptions, generateHtml as generateFormTextareaHtml } from './FormTextareaBlock.vue';
 import GridBlock, { getDefaultOptions as getGridDefaultOptions, generateHtml as generateGridHtml } from './GridBlock.vue';
 import ImageBlock, { getDefaultOptions as getImageDefaultOptions, generateHtml as generateImageHtml } from './ImageBlock.vue';
 import InputGroupBlock, { getDefaultOptions as getInputGroupDefaultOptions, generateHtml as generateInputGroupHtml } from './InputGroupBlock.vue';
@@ -44,7 +48,11 @@ export {
   ContainerBlock, getContainerDefaultOptions, generateContainerHtml,
   DropdownBlock, getDropdownDefaultOptions, generateDropdownHtml,
   FlexBlock, getFlexDefaultOptions, generateFlexHtml,
-  FormBlock, getFormDefaultOptions, generateFormHtml,
+  FormCheckboxBlock, getFormCheckboxDefaultOptions, generateFormCheckboxHtml,
+  FormInputBlock, getFormInputDefaultOptions, generateFormInputHtml,
+  FormRangeBlock, getFormRangeDefaultOptions, generateFormRangeHtml,
+  FormSelectBlock, getFormSelectDefaultOptions, generateFormSelectHtml,
+  FormTextareaBlock, getFormTextareaDefaultOptions, generateFormTextareaHtml,
   GridBlock, getGridDefaultOptions, generateGridHtml,
   ImageBlock, getImageDefaultOptions, generateImageHtml,
   InputGroupBlock, getInputGroupDefaultOptions, generateInputGroupHtml,
